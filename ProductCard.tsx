@@ -1,26 +1,27 @@
-import React from 'react'
-import Badge from './Badge'
-import Rating from './Rating'
-import type {Product} from '../data/products'
+import Badge from './Badge';
+import Rating from './Rating';
+import { Product } from '../data/products';
 
-export default function ProductCard({p, selectedColor}:{p:Product, selectedColor?:string}){
-  const bg = selectedColor ? selectedColor : 'transparent'
+interface ProductCardProps {
+  product: Product;
+  selectedColor?: string;
+}
+
+export default function ProductCard({ product, selectedColor }: ProductCardProps) {
+  const displayImage = selectedColor ? `${product.imageUrl}&bg=${selectedColor}` : product.imageUrl;
   return (
-    <article className="bg-white rounded-lg shadow-sm overflow-hidden">
-      <div className="relative h-44 flex items-center justify-center" style={{background:bg}}>
-        {p.isHot && <div className="absolute top-2 left-2"><Badge>HOT</Badge></div>}
-        <img src={p.imageUrl} alt={p.name} className="max-h-40 object-contain"/>
+    <div className="border rounded p-4 flex flex-col">
+      <div className="relative">
+        <img src={displayImage} alt={product.name} className="w-full h-48 object-cover rounded" />
+        {product.isHot && <Badge label="HOT" />}
       </div>
-      <div className="p-3">
-        <h3 className="font-medium text-sm">{p.name}</h3>
-        <div className="mt-2 flex items-center justify-between">
-          <div>
-            <div className="text-sm text-gray-500 line-through">₹{p.price}</div>
-            <div className="text-base font-semibold">₹{p.discountPrice} <span className="text-green-600 text-xs font-medium">-{p.discountPercent}%</span></div>
-          </div>
-          <Rating value={p.ratingValue} count={p.ratingCount}/>
-        </div>
+      <h2 className="font-bold mt-2">{product.name}</h2>
+      <div className="flex items-center space-x-2">
+        <span className="line-through text-gray-400">${product.price}</span>
+        <span className="text-green-600 font-bold">${product.discountPrice}</span>
+        <span className="text-red-500">({product.discountPercent}%)</span>
       </div>
-    </article>
-  )
+      <Rating value={product.ratingValue} count={product.ratingCount} />
+    </div>
+  );
 }
