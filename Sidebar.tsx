@@ -1,26 +1,34 @@
-import React from 'react'
-import {CATEGORIES, ALL_COLORS} from '../data/products'
+import { useState } from 'react';
+import { Product } from '../data/products';
 
-export default function Sidebar({onCategory,activeCategories,onColor,activeColor}:{onCategory:(c:string)=>void, activeCategories:string[], onColor:(c:string|null)=>void, activeColor:string|null}){
+interface SidebarProps {
+  categories: string[];
+  onCategorySelect: (category: string) => void;
+}
+
+export default function Sidebar({ categories, onCategorySelect }: SidebarProps) {
+  const [open, setOpen] = useState<{ [key: string]: boolean }>({});
+
+  const toggleCategory = (cat: string) => setOpen(prev => ({ ...prev, [cat]: !prev[cat] }));
+
   return (
-    <aside className="space-y-4">
-      <div className="bg-white p-3 rounded shadow-sm">
-        <h4 className="font-semibold mb-2">Categories</h4>
-        {CATEGORIES.map(cat=>(
-          <button key={cat} onClick={()=>onCategory(cat)} className={`block w-full text-left py-1 text-sm ${activeCategories.includes(cat)?'font-semibold':'text-gray-600'}`}>{cat}</button>
-        ))}
-      </div>
-
-      <div className="bg-white p-3 rounded shadow-sm">
-        <h4 className="font-semibold mb-2">Colors</h4>
-        <div className="flex flex-wrap gap-2">
-          <button aria-label="Clear color" onClick={()=>onColor(null)} className={`px-2 py-1 text-sm ${activeColor===null?'underline':''}`}>All</button>
-          {ALL_COLORS.map(c=>(
-            <button key={c} onClick={()=>onColor(c)} aria-pressed={activeColor===c} title={c}
-              className="w-7 h-7 rounded-full border" style={{backgroundColor: c}}/>
-          ))}
+    <div className="w-64 p-4 border-r hidden md:block">
+      {categories.map(cat => (
+        <div key={cat}>
+          <button className="w-full text-left font-bold" onClick={() => toggleCategory(cat)}>
+            {cat}
+          </button>
+          {open[cat] && (
+            <ul className="pl-4 mt-2 space-y-1">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <li key={i}>
+                  <button onClick={() => onCategorySelect(cat)}>Item {i + 1}</button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </div>
-    </aside>
-  )
+      ))}
+    </div>
+  );
 }
