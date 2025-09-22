@@ -3,10 +3,11 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "./", // ensures paths work on Netlify
   build: {
     rollupOptions: {
-      input: "/index.html",
-      external: ["/src/main.tsx"],
-    },
-  },
+      // Optional: explicitly externalize entry if needed
+      external: ["./src/main.tsx"]
+    }
+  }
 });
