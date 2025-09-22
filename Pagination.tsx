@@ -1,11 +1,21 @@
-import React from 'react'
-export default function Pagination({page, total, onPage}:{page:number,total:number,onPage:(n:number)=>void}){
-  const pages = Array.from({length: total}).map((_,i)=>i+1)
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
   return (
-    <nav className="flex items-center gap-2">
-      {pages.map(n=>(
-        <button key={n} onClick={()=>onPage(n)} className={`px-3 py-1 rounded ${n===page ? 'bg-gray-900 text-white' : 'bg-white'}`}>{n}</button>
+    <div className="flex space-x-2 mt-4 justify-center">
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          className={`px-3 py-1 border rounded ${currentPage === i + 1 ? 'bg-blue-500 text-white' : ''}`}
+          onClick={() => onPageChange(i + 1)}
+        >
+          {i + 1}
+        </button>
       ))}
-    </nav>
-  )
+    </div>
+  );
 }
