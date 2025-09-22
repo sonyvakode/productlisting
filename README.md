@@ -1,5 +1,4 @@
 # Product Listing UI (Vite + React + TypeScript + Tailwind)
-
 Minimal, human-like concise code:
 - Run: npm install && npm run dev
 - Build: npm run build
